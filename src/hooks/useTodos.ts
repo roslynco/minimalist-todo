@@ -31,6 +31,9 @@ export interface UpdateTodoInput {
 let todosCache: Todo[] = [];
 const listeners: Set<() => void> = new Set();
 
+// Stable empty array for SSR to prevent infinite loop in useSyncExternalStore
+const EMPTY_TODOS: Todo[] = [];
+
 function emitChange() {
   for (const listener of listeners) {
     listener();
@@ -47,7 +50,7 @@ function getSnapshot(): Todo[] {
 }
 
 function getServerSnapshot(): Todo[] {
-  return [];
+  return EMPTY_TODOS;
 }
 
 /**
